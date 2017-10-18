@@ -1,21 +1,21 @@
-#view docker images list
+# view docker images list
   $ docker images
-#build docker images
+# build docker images
   $ docker build -t="user-name/repo-name:tag"
-#remove docker images
+# remove docker images
   $ docker rmi [repo-name]
 
-#view docker container list
+# view docker container list
   $ docker ps
-#start docker container running in background
+# start docker container running in background
   $ docker run -d -P --name [container-name] [user-name/repository-name]:[tag]
-#stop docker container
+# stop docker container
   $ docker stop [container id]
-#remove docker container
+# remove docker container
   $ docker rm [container id]
 
-#edit docker image
+# edit docker image
   $ sudo docker run -t -i [user-name/repository-name] /bin/bash
-  *install module ... remember the container ID!!!!!
+  	* install module ... remember the container ID!!!!!
   $ sudo docker commit -m "..." -a "..." [container id] [user-name/repository-name]
 
