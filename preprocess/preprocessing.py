@@ -1,4 +1,3 @@
-'''
 text = 'Yeah, I know when I compliment her she won\'t believe me \
         And it\'s so sad to think that she don\'t see what I see \
         But every time she asks me do I look okay? \
@@ -19,6 +18,7 @@ print('countvectorizer\'s tokenizer', CountVectorizer().build_tokenizer()(text),
 # lower case, comma will be ignore, abbreviation will make sense, but time consuming
 from keras.preprocessing.text import text_to_word_sequence
 print('keras text to word sequence', text_to_word_sequence(text))
+
 #################### word to vector #######################
 data = ['cute', 'beauty', 'cold', 'cold', 'cold', 'hot', 'beauty', 'cute']
 
@@ -38,7 +38,7 @@ print(onehot_data_sk)
 from keras.utils import to_categorical
 onehot_data_keras = to_categorical(data)
 print(onehot_data_keras)
-'''
+
 ############# word importance ############
 data = ['bobo is cute', \
         'bobo is smart', \
