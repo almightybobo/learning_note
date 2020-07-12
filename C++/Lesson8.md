@@ -29,3 +29,4 @@
 - can use a user defined object in an array
 - Dog dogs[3] -> 3 Dog objects
 
+## skip: concept 24
