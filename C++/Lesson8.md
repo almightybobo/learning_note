@@ -16,4 +16,16 @@
 - do not return a value, including void
 
 ## Destructors
+- called whenever an object goes out of scope
+- just like a constructor, a destructor is called automatically
+- cannot return value, cannot accept parameters
+- must have the same name as the class (identified with a tilda (~) symbol)
+- release memory that was allocated by the class constructor and member functions
+
+## Helper Functions in Classes
+- can perform tasks that are often requested or are easier to perform in the class itself
+
+## Arrays and Classes
+- can use a user defined object in an array
+- Dog dogs[3] -> 3 Dog objects
 
