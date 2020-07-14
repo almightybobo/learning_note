@@ -1,0 +1,127 @@
+set nocompatible
+filetype off
+
+let g:python_highlight_all = 1
+let g:gitgutter_diff_base='HEAD'
+let g:NERDTreeMapActivateNode='e'
+let g:NERDTreeMapOpenSplit='s'
+let g:NERDTreeMapOpenVSplit='v'
+highlight javascriptImport ctermfg=Red
+highlight javascriptExport ctermfg=Red
+autocmd FileType nerdtree nmap <buffer> e ge
+autocmd FileType nerdtree nmap <buffer> s gs
+autocmd FileType nerdtree nmap <buffer> v gv
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc()==0 && !exists("s:std_in") | NERDTree | endif
+
+set t_Co=256
+set background=dark
+"set t_AF=[1;3%p1%dm
+"set t_AB=[4%p1%dm
+
+set incsearch
+set hlsearch
+set modelines=1
+set nofoldenable
+set nowrap
+set nrformats=alpha,octal,hex
+set number
+set nu
+set numberwidth=1
+set ruler
+set wildmenu
+
+syntax on
+highlight Comment ctermfg=DarkGray
+highlight DiffAdd ctermfg=White ctermbg=Green
+highlight DiffChange ctermfg=White ctermbg=Yellow
+highlight DiffDelete ctermfg=White ctermbg=Red
+highlight DiffText ctermfg=DarkGray ctermbg=Gray
+highlight Incsearch ctermfg=White
+highlight LineNr ctermfg=DarkGray
+highlight Visual ctermfg=White
+
+highlight Directory ctermfg=Cyan
+highlight Constant ctermfg=Magenta
+highlight Special ctermfg=Red
+highlight PreProc ctermfg=Blue
+
+
+autocmd FileType html,css,javascript,ls,vue setlocal expandtab shiftwidth=2 softtabstop=2
+autocmd FileType javascript setlocal filetype=javascript.jsx
+autocmd FileType javascript.jsx setlocal autoindent
+autocmd FileType pug,sass,styl setlocal expandtab shiftwidth=2 softtabstop=2
+autocmd FileType json setlocal expandtab shiftwidth=2 softtabstop=2
+autocmd FileType perl,python,java setlocal expandtab shiftwidth=4 softtabstop=4
+autocmd FileType sh,cpp,make setlocal shiftwidth=4 tabstop=4
+autocmd FileType c setlocal shiftwidth=4 tabstop=4 expandtab
+autocmd FileType php setlocal shiftwidth=4 tabstop=4 expandtab
+autocmd BufNewFile *.h setlocal shiftwidth=4 tabstop=4 expandtab
+
+" au BufRead,BufNewFile *.asm set filetype=nasm tabstop=4 shiftwidth=4
+
+autocmd BufNewFile,BufEnter *.vue setfiletype vue
+autocmd FileType vue setlocal autoindent expandtab shiftwidth=2 softtabstop=2 commentstring=//\ %s comments=://
+\ | syntax include @PUG syntax/pug.vim | unlet b:current_syntax
+\ | syntax include @JS syntax/javascript.vim | unlet b:current_syntax
+\ | syntax include @SASS syntax/sass.vim | unlet b:current_syntax
+\ | syntax region vueTemplate matchgroup=vueTag start=/^<template.*>$/ end='</template>' contains=@PUG keepend
+\ | syntax region vueScript matchgroup=vueTag start=/^<script.*>$/ end='</script>' contains=@JS keepend
+\ | syntax region vueStyle matchgroup=vueTag start=/^<style.*>$/ end='</style>' contains=@SASS keepend
+\ | syntax match htmlArg /v-text\|v-html\|v-if\|v-show\|v-else\|v-for\|v-on\|v-bind\|v-model\|v-pre\|v-cloak\|v-once/ contained
+\ | syntax keyword htmlArg contained key ref slot
+\ | syntax keyword htmlTagName contained component transition transition-group keep-alive slot
+\ | syntax sync fromstart
+highlight vueTag ctermfg=Blue
+
+autocmd BufNewFile *.html silent! 0r $HOME/.vim/template/tmpl.html | 12delete | 9
+autocmd BufNewFile *.pug silent! 0r $HOME/.vim/template/tmpl.pug | 9delete
+autocmd BufNewFile *.vue silent! 0r $HOME/.vim/template/tmpl.vue | 13delete | 2
+autocmd BufNewFile *.pl silent! 0r $HOME/.vim/template/tmpl.pl | 4
+autocmd BufNewFile *.py silent! 0r $HOME/.vim/template/tmpl.py | 4
+" autocmd BufNewFile *.c silent! 0r $HOME/.vim/template/tmpl.c | 7delete | 3
+
+nnoremap <Tab> <C-W>w
+nnoremap <C-W><C-W> <C-W>p
+nnoremap + <C-W>+
+nnoremap _ <C-W>-
+nnoremap < <C-W><
+nnoremap > <C-W>>
+nnoremap <C-C> <C-A>
+nnoremap ` :NERDTreeToggle<CR>
+nnoremap tt :TagbarToggle<CR>
+xnoremap s :sort<CR>
+
+setlocal indentexpr=GetGooglePythonIndent(v:lnum)
+
+let s:maxoff = 50 " maximum number of lines to look backwards.
+
+function GetGooglePythonIndent(lnum)
+  " Indent inside parens.
+  " Align with the open paren unless it is at the end of the line.
+  " E.g.
+  "   open_paren_not_at_EOL(100,
+  "                         (200,
+  "                          300),
+  "                         400)
+  "   open_paren_at_EOL(
+  "       100, 200, 300, 400)
+  call cursor(a:lnum, 1)
+  let [par_line, par_col] = searchpairpos('(\|{\|\[', '', ')\|}\|\]', 'bW',
+        \ "line('.') < " . (a:lnum - s:maxoff) . " ? dummy :"
+        \ . " synIDattr(synID(line('.'), col('.'), 1), 'name')"
+        \ . " =~ '\\(Comment\\|String\\)$'")
+  if par_line > 0
+    call cursor(par_line, 1)
+    if par_col != col("$") - 1
+      return par_col
+    endif
+  endif
+
+  " Delegate the rest to the original function.
+  return GetPythonIndent(a:lnum)
+
+endfunction
+
+let pyindent_nested_paren="&sw*2"
+let pyindent_open_paren="&sw*2"
