@@ -14,12 +14,11 @@
   }
 ```
 
-## Also can use on class
+## Also can use in "class"
 ```
 template <class T>
 ```
 - The member functions must all be treated as generic functions. You will have to add the template command to each member function.
-
 
 ## Ref
 - http://www.cplusplus.com/doc/oldtutorial/templates/
